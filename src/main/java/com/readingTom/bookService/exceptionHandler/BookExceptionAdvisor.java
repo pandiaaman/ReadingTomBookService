@@ -16,7 +16,7 @@ public class BookExceptionAdvisor {
 
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<ApiResponse> handleNoProductFoundException(ResourceNotFoundException ex){
-		log.warn("EXCEPTION OCCURED:::::::handling the no book found exeption");
+		log.warn("EXCEPTION OCCURED:::::::handling the no resource found exeption");
 		
 		ApiResponse res =  ApiResponse.builder()
 				.msg(ex.getMessage())
