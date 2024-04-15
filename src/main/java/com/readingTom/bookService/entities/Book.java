@@ -1,6 +1,5 @@
 package com.readingTom.bookService.entities;
 
-import java.util.List;
 
 import org.hibernate.annotations.ColumnDefault;
 
@@ -12,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
