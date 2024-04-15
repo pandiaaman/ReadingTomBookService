@@ -1,6 +1,8 @@
-package com.readingTom.bookServices;
+package com.readingTom.bookService.services;
 
 import java.util.List;
+
+import org.springframework.stereotype.Service;
 
 import com.readingTom.bookService.entities.GoogleApiBook;
 

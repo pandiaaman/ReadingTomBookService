@@ -1,4 +1,4 @@
-package com.readingTom.bookServices.impl;
+package com.readingTom.bookService.services.impl;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.readingTom.bookService.customException.GoogleApiBookNotFoundException;
 import com.readingTom.bookService.entities.GoogleApiBook;
 import com.readingTom.bookService.repositories.GoogleApiBookRepository;
-import com.readingTom.bookServices.GoogleApiBookService;
+import com.readingTom.bookService.services.GoogleApiBookService;
 
 import lombok.extern.slf4j.Slf4j;
 

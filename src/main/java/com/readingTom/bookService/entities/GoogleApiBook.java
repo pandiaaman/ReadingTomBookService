@@ -48,7 +48,7 @@ public class GoogleApiBook {
 	@Column(name = "google_api_book_publish_date")
 	private String googleApiBookPublishedDate;
 	
-	@Column(name = "google_api_book_subtitle")
+	@Column(name = "google_api_book_page_count")
 	private int googleApiBookPageCount;
 	
 	//when the categories come in, we take the array of the string, select each value and check if they exist in BookCategory table

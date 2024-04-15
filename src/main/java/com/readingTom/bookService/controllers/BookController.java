@@ -2,6 +2,7 @@ package com.readingTom.bookService.controllers;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.readingTom.bookService.customException.BookNotFoundException;
 import com.readingTom.bookService.entities.Book;
-import com.readingTom.bookServices.BookService;
+import com.readingTom.bookService.services.BookService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/book")
 public class BookController {
 
+	@Autowired
 	private BookService bookService;
 
 	public BookController(BookService bookService) {
@@ -45,7 +47,7 @@ public class BookController {
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(allBooks);
 		}catch(Exception e) {
-			log.error("error in getting all the houses");
+			log.error("error in getting all the books");
 			e.printStackTrace();
 		}
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

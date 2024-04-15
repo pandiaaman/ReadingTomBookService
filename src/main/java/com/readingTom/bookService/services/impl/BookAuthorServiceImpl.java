@@ -1,4 +1,4 @@
-package com.readingTom.bookServices.impl;
+package com.readingTom.bookService.services.impl;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.readingTom.bookService.customException.AuthorNotFoundException;
 import com.readingTom.bookService.entities.BookAuthor;
 import com.readingTom.bookService.repositories.BookAuthorRepository;
-import com.readingTom.bookServices.BookAuthorService;
+import com.readingTom.bookService.services.BookAuthorService;
 
 import lombok.extern.slf4j.Slf4j;
 

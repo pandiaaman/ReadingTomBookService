@@ -24,6 +24,6 @@ public class BookExceptionAdvisor {
 				.success(false)
 				.build();
 		
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
 	}
 }
