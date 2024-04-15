@@ -1,4 +1,4 @@
-package com.readingTom.bookServices.impl;
+package com.readingTom.bookService.services.impl;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.readingTom.bookService.customException.BookNotFoundException;
 import com.readingTom.bookService.entities.Book;
 import com.readingTom.bookService.repositories.BookRepository;
-import com.readingTom.bookServices.BookService;
+import com.readingTom.bookService.services.BookService;
 
 import lombok.extern.slf4j.Slf4j;
 

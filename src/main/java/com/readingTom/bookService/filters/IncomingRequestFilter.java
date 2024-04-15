@@ -31,7 +31,7 @@ public class IncomingRequestFilter implements Filter{
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse  res= (HttpServletResponse) response;
 		
-		if (!req.getRequestURL().toString().contains("books/")){  
+		if (!req.getRequestURL().toString().contains("bookservice/")){  
 			log.error("FILTER ERROR ::: OH HO! incoming request is different one!");
 			
             res.setStatus(HttpStatus.BAD_GATEWAY.value());

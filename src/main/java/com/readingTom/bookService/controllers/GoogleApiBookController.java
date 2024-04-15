@@ -2,6 +2,7 @@ package com.readingTom.bookService.controllers;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.readingTom.bookService.customException.GoogleApiBookNotFoundException;
 import com.readingTom.bookService.entities.GoogleApiBook;
-import com.readingTom.bookServices.GoogleApiBookService;
+import com.readingTom.bookService.services.GoogleApiBookService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/googleapibook")
 public class GoogleApiBookController {
 	
+	@Autowired
 	private GoogleApiBookService googleApiBookService;
 
 	public GoogleApiBookController(GoogleApiBookService googleApiBookService) {
