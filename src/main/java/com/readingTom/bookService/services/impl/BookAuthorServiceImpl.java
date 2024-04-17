@@ -1,6 +1,7 @@
 package com.readingTom.bookService.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,17 @@ public class BookAuthorServiceImpl implements BookAuthorService{
 		BookAuthor savedAuthor = this.bookAuthorRepository.save(bookAuthor);
 		
 		return savedAuthor;
+	}
+
+	@Override
+	public BookAuthor findByAuthorName(String authorName) {
+		log.info("finding book author by name " + authorName);
+		
+		Optional<BookAuthor> authorByName = this.bookAuthorRepository.findByAuthorName(authorName);
+		
+		BookAuthor fetchedAuthor = authorByName.orElse(null);
+		
+		return fetchedAuthor;
 	}
 
 }

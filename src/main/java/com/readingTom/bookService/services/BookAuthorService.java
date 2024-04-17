@@ -16,4 +16,6 @@ public interface BookAuthorService {
 		
 	//create/add a author
 	public BookAuthor addBookAuthor(BookAuthor book);
+
+	public BookAuthor findByAuthorName(String authorName); 
 }

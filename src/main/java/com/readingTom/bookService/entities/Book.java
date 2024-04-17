@@ -3,6 +3,9 @@ package com.readingTom.bookService.entities;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,10 +42,14 @@ public class Book {
 	@Column(name = "book_id")
 	private String bookId;
 	
+	//we can't send the book object from frontend so we rely on the id and then create the required googleapibook object and add it by ourselves
+	@Column(name = "google_api_book_id")
+	private String googleApiBookId;
+	
 	//multiple books in the local system will be associated to one particular book from google books api
 	//process will be to get the book details and then first call the google api, get data and create the googleAPiBook object(if not existing already) and then store it here
 	//many to one
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "google_api_book_reference")
 	private GoogleApiBook googleApiBook; //we first create the googleAPIBook object in the table and then use that reference
 	
@@ -53,26 +60,32 @@ public class Book {
 	
 	@Column(name = "is_book_available")
 	@ColumnDefault("true")
+	@JsonProperty
 	private boolean isBookAvailable;
 	
 	@Column(name = "is_book_swapped")
 	@ColumnDefault("false")
+	@JsonProperty
 	private boolean isBookSwapped;
 	
 	@Column(name = "is_book_rented_at_this_time")
 	@ColumnDefault("false")
+	@JsonProperty
 	private boolean isBookRentedAtThisTime;
 	
 	@Column(name = "is_book_for_rent")
 	@ColumnDefault("false")
+	@JsonProperty
 	private boolean isBookForRent;
 	
 	@Column(name = "is_book_for_swap")
 	@ColumnDefault("false")
+	@JsonProperty
 	private boolean isBookForSwap;
 	
 	@Column(name = "is_book_for_rent_and_swap")
 	@ColumnDefault("false")
+	@JsonProperty
 	private boolean isBookForRentAndSwap;
 	
 	@Column(name = "total_ongoing_interactions_for_this_book")
