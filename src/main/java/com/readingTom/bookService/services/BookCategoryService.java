@@ -1,8 +1,8 @@
 package com.readingTom.bookService.services;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.stereotype.Service;
 
 import com.readingTom.bookService.entities.BookCategory;
 
@@ -17,4 +17,7 @@ public interface BookCategoryService {
 		
 	//create/add a category
 	public BookCategory addBookCategory(BookCategory bookCategory);
+	
+	//find the category by name //custom finder methods
+	public BookCategory findByCategoryName(String categoryName);
 }

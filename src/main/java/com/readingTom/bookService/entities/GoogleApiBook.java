@@ -1,5 +1,6 @@
 package com.readingTom.bookService.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -57,14 +58,14 @@ public class GoogleApiBook {
 	//many to many relationship
 	@ManyToMany(cascade = CascadeType.ALL) //now we dont  need to save the category one separately, the moment we save google book api, the category will automatically be saved
 	@Column(name = "google_api_book_categories")
-	private List<BookCategory> googleApiBookCategories; //TODO: check if we need to initiate this as ArrayList();
+	private List<BookCategory> googleApiBookCategories = new ArrayList<>(); //TODO: check if we need to initiate this as ArrayList();
 	
 	//Note: the class in which we use cascase.ALL, we only need to save the object of that class in JPA
 	 
 	//many to many
 	@ManyToMany(cascade = CascadeType.ALL) //table containing the mapping will be mapped by the bookAuthor column
 	@Column(name = "google_api_book_authors")
-	private List<BookAuthor> googleApiBookAuthors;
+	private List<BookAuthor> googleApiBookAuthors = new ArrayList<>();
 	
 	@Column(name = "google_api_book_language")
 	private String googleApiBookLanguage;
@@ -78,9 +79,12 @@ public class GoogleApiBook {
 	@Column(name = "google_api_book_retail_price")
 	private double googleApiBookRetailPrice;
 	
+	@Column(name = "google_api_book_retail_price_currency_code")
+	private String googleApiBookRetailPriceCurrencyCode;
+	
 	//one google api book will be having many books locally uploaded in the system
 	//one to many
-	@OneToMany(mappedBy = "googleApiBook",cascade = CascadeType.ALL) //cascade: if we remove a google api book, all associated books will be removed along with it
+	@OneToMany(mappedBy = "googleApiBook") //cascade: if we remove a google api book, all associated books will be removed along with it
 	private List<Book> uploadedBooksListForThisGoogleApiBook;
 	
 	@Column(name = "total_books_uploaded_for_this_google_api_book")

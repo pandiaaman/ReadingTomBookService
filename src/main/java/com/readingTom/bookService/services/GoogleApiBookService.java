@@ -14,6 +14,8 @@ public interface GoogleApiBookService {
 		
 	//get google api book by id
 	public GoogleApiBook getGoogleApiBookById(String googleApiBookId);
+	
+	public boolean checkGoogleApiBookById(String googleApiBookId);
 		
 	//create/add a google api book
 	public GoogleApiBook addGoogleApiBook(GoogleApiBook book);

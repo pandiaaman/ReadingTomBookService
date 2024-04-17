@@ -1,6 +1,7 @@
 package com.readingTom.bookService.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,14 @@ public class GoogleApiBookServiceImpl implements GoogleApiBookService {
 		GoogleApiBook fetchedBook = this.googleApiBookRepository.findById(googleApiBookId).orElseThrow(() -> new GoogleApiBookNotFoundException("Google API BOOK with id " + googleApiBookId + " not found in the system!!!"));
 		return fetchedBook;
 	}
+	
+	
+	@Override
+	public boolean checkGoogleApiBookById(String googleApiBookId) {
+		log.info("getting a google api book with id " + googleApiBookId);
+	    return this.googleApiBookRepository.existsById(googleApiBookId);
+	}
+	
 
 	@Override
 	public GoogleApiBook addGoogleApiBook(GoogleApiBook book) {

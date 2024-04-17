@@ -1,0 +1,56 @@
+	
+	
+	//TODO: remove the below method later
+	
+	//this is a test method to check if the api data is returned correctly
+	@GetMapping("/test1")
+	public TestGoogleApiBook getGoogleApiBookDetailsById(){
+		String url = "https://www.googleapis.com/books/v1/volumes/8dGXDwAAQBAJ"; // HT0HEAAAQBAJ
+		RestTemplate restTemplate = new RestTemplate();
+		
+		TestGoogleApiBook fetchedBook = restTemplate.getForObject(url, TestGoogleApiBook.class);
+		
+		log.info("******************TITLE :: " + fetchedBook.getId());
+	    log.info("******************PUBLISHER :: " + fetchedBook.getEtag());
+	    
+	    TestGoogleVolumeInfo volumeInfo = fetchedBook.getVolumeInfo();
+	    log.info("******************TITLE :: " + volumeInfo.getTitle());
+	    for(String author : volumeInfo.getAuthors()) {
+	    	log.info("******************AUTHORS :: " + author);
+	    }
+	    
+	    for(String category : volumeInfo.getCategories()) {
+	    	log.info("******************CATEGORY :: " + category);
+	    }
+	    
+	    
+		
+		return fetchedBook;
+	}
+}
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString
+class TestGoogleApiBook{
+	private String id;
+	private String etag;
+	private TestGoogleVolumeInfo volumeInfo;
+}
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString
+class TestGoogleVolumeInfo{
+	private String title;
+	private String publisher;
+	private String publishedDate;
+	private int pageCount;
+	private String maturityRating;
+	private ArrayList<String> authors;
+	private ArrayList<String> categories;
+}
