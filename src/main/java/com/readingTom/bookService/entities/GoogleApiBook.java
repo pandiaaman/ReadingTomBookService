@@ -28,7 +28,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 @Table(name = "google_api_book_table")
 public class GoogleApiBook {
 
@@ -37,19 +36,25 @@ public class GoogleApiBook {
 	@Column(name = "google_api_book_id")
 	private String googleApiBookId;
 	
-	@Column(name = "google_api_book_title")
+	@Column(name = "google_api_book_title", columnDefinition = "VARCHAR(255) DEFAULT ''")
 	private String googleApiBookTitle;
 	
-	@Column(name = "google_api_book_subtitle")
+	@Column(name = "google_api_book_subtitle", columnDefinition = "VARCHAR(255) DEFAULT ''")
 	private String googleApiBookSubTitle;
 	
-	@Column(name = "google_api_book_publisher")
+	@Column(name = "google_api_book_thumbnail_url", columnDefinition = "VARCHAR(255) DEFAULT ''")
+	private String googleApiBookThumbnailUrl;
+	
+	@Column(name = "google_api_book_small_thumbnail_url", columnDefinition = "VARCHAR(255) DEFAULT ''")
+	private String googleApiBookSmallThumbnailUrl;
+	
+	@Column(name = "google_api_book_publisher", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT ''")
 	private String googleApiBookPublisher;
 	
-	@Column(name = "google_api_book_publish_date")
+	@Column(name = "google_api_book_publish_date", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT ''")
 	private String googleApiBookPublishedDate;
 	
-	@Column(name = "google_api_book_page_count")
+	@Column(name = "google_api_book_page_count", nullable = false, columnDefinition = "INT DEFAULT 0")
 	private int googleApiBookPageCount;
 	
 	//when the categories come in, we take the array of the string, select each value and check if they exist in BookCategory table
@@ -67,19 +72,19 @@ public class GoogleApiBook {
 	@Column(name = "google_api_book_authors")
 	private List<BookAuthor> googleApiBookAuthors = new ArrayList<>();
 	
-	@Column(name = "google_api_book_language")
+	@Column(name = "google_api_book_language", columnDefinition = "VARCHAR(255) DEFAULT ''")
 	private String googleApiBookLanguage;
 	
-	@Column(name = "google_api_book_isbn_10")
+	@Column(name = "google_api_book_isbn_10", columnDefinition = "VARCHAR(255) DEFAULT ''")
 	private String googleApiBookIsbn10;
 	
-	@Column(name = "google_api_book_isbn_13")
+	@Column(name = "google_api_book_isbn_13", columnDefinition = "VARCHAR(255) DEFAULT ''")
 	private String googleApiBookIsbn13;
 	
-	@Column(name = "google_api_book_retail_price")
+	@Column(name = "google_api_book_retail_price", columnDefinition = "DOUBLE DEFAULT 0.0")
 	private double googleApiBookRetailPrice;
 	
-	@Column(name = "google_api_book_retail_price_currency_code")
+	@Column(name = "google_api_book_retail_price_currency_code", columnDefinition = "VARCHAR(255) DEFAULT ''")
 	private String googleApiBookRetailPriceCurrencyCode;
 	
 	//one google api book will be having many books locally uploaded in the system
@@ -87,18 +92,19 @@ public class GoogleApiBook {
 	@OneToMany(mappedBy = "googleApiBook") //cascade: if we remove a google api book, all associated books will be removed along with it
 	private List<Book> uploadedBooksListForThisGoogleApiBook;
 	
-	@Column(name = "total_books_uploaded_for_this_google_api_book")
+	@Column(name = "total_books_uploaded_for_this_google_api_book", columnDefinition = "INT DEFAULT 0")
 	private int totalBooksUploadedForThisGoogleApiBook;
 	
-	@Column(name = "rental_books_uploaded_for_this_google_api_book")
+	@Column(name = "rental_books_uploaded_for_this_google_api_book", columnDefinition = "INT DEFAULT 0")
 	private int rentalBooksUploadedForThisGoogleApiBook;
 	
-	@Column(name = "swap_books_uploaded_for_this_google_api_book")
+	@Column(name = "swap_books_uploaded_for_this_google_api_book", columnDefinition = "INT DEFAULT 0")
 	private int swapBooksUploadedForThisGoogleApiBook;
 	
-	@Column(name = "ongoing_interactions_for_this_google_api_book")
+	
+	@Column(name = "ongoing_interactions_for_this_google_api_book", columnDefinition = "INT DEFAULT 0")
 	private int ongoingInteractionsForThisGoogleApiBook;
 	
-	@Column(name = "total_fulfilled_interactions_for_this_google_api_book")
+	@Column(name = "total_fulfilled_interactions_for_this_google_api_book", columnDefinition = "INT DEFAULT 0")
 	private int totalFulfilledInteractionForThisGoogleApiBook;
 }
