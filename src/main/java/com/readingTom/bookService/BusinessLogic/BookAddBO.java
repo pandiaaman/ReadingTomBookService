@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import com.readingTom.bookService.entities.BookAuthor;
 import com.readingTom.bookService.entities.BookCategory;
 import com.readingTom.bookService.entities.GoogleApiBook;
+import com.readingTom.bookService.helper.RestTemplateProviderSingleton;
 import com.readingTom.bookService.services.BookAuthorService;
 import com.readingTom.bookService.services.BookCategoryService;
 import com.readingTom.bookService.services.GoogleApiBookService;
@@ -37,6 +38,9 @@ public class BookAddBO {
 	@Autowired
 //	@Lazy
 	private BookAuthorService bookAuthorService;
+	
+	@Autowired
+	private RestTemplateProviderSingleton restTemplateProvider;
 	
 	private final String GOOGLE_API_URL = "https://www.googleapis.com/books/v1/volumes/";
 	
@@ -189,7 +193,8 @@ public class BookAddBO {
 		String googleApiBookUrl = GOOGLE_API_URL.concat(incomingGoogleApiBookId.trim());
 		log.info("hitting the URL to get google api book:: " + googleApiBookUrl);
 		
-		RestTemplate restTemplate = new RestTemplate();
+		//calling singleton class for restTemplate
+		RestTemplate restTemplate = restTemplateProvider.getRestTemplate();
 		
 		//calling the google book api and storing the data in temp pojo
 		TempGoogleApiBook fetchedBook = restTemplate.getForObject(googleApiBookUrl, TempGoogleApiBook.class);
