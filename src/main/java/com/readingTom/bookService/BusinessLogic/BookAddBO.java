@@ -68,7 +68,6 @@ public class BookAddBO {
 		    	
 		    	//if we are getting an existing book this means that we already have the author and category info added
 		    	//we only need to update the book uploaded detail that we are doing later on after else part
-		    	
 		    	//BUT we also need to update the author and category sections for this book
 		    		
 			}
@@ -253,15 +252,6 @@ public class BookAddBO {
 		List<BookAuthor> googleApiBookAuthors = getGoogleApiBookAuthors(googleApiBook, volumeInfo, isBookForRent, isBookForSwap);
 		googleApiBook.setGoogleApiBookAuthors(googleApiBookAuthors);
 		
-		
-		
-		//local system columns : updates are done below
-//		googleApiBook.setTotalBooksUploadedForThisGoogleApiBook(0);
-//		googleApiBook.setRentalBooksUploadedForThisGoogleApiBook(0);
-//		googleApiBook.setSwapBooksUploadedForThisGoogleApiBook(0);
-//		googleApiBook.setOngoingInteractionsForThisGoogleApiBook(0);
-//		googleApiBook.setTotalFulfilledInteractionForThisGoogleApiBook(0);
-		
 		return googleApiBook;
 	}
 	
@@ -321,22 +311,8 @@ public class BookAddBO {
 					bookAuthor = new BookAuthor();
 					
 					bookAuthor.setAuthorName(authorName);
-//					bookAuthor.setOngoingInteractionsForThisAuthor(0);
-//					bookAuthor.setRentalBooksUploadedForThisAuthor(0);
-//					bookAuthor.setSwapBooksUploadedForThisAuthor(0);
-//					bookAuthor.setTotalBooksUploadedForThisAuthor(0);
-//					bookAuthor.setTotalFulfilledInteractionForThisAuthor(0);
-//					bookAuthor.setTotalGoogleApiBooksUploadedForThisAuthor(0);
 				}
 				
-//				bookAuthor.setTotalBooksUploadedForThisAuthor(bookAuthor.getTotalBooksUploadedForThisAuthor() + 1);
-//				
-//				if(isBookForRent) {
-//					bookAuthor.setRentalBooksUploadedForThisAuthor(bookAuthor.getRentalBooksUploadedForThisAuthor() + 1);
-//				}
-//				if(isBookForSwap) {
-//					bookAuthor.setSwapBooksUploadedForThisAuthor(bookAuthor.getSwapBooksUploadedForThisAuthor() + 1);
-//				}
 //				
 				
 				log.info("^^^^^^^^^^^^^^ bookAuthor :: " + bookAuthor);
@@ -388,13 +364,6 @@ public class BookAddBO {
 					bookCategory = new BookCategory();
 					
 					bookCategory.setCategoryName(categoryName);
-					//Not needed below part since we added the default values to the columns
-//					bookCategory.setOngoingInteractionsForThisCategory(0); 
-//					bookCategory.setRentalBooksUploadedForThisCategory(0);
-//					bookCategory.setSwapBooksUploadedForThisCategory(0);
-//					bookCategory.setTotalBooksUploadedForThisCategory(0);
-//					bookCategory.setTotalFulfilledInteractionForThisCategory(0);
-//					bookCategory.setTotalGoogleApiBooksUploadedForThisCategory(0);
 				}
 				
 				
