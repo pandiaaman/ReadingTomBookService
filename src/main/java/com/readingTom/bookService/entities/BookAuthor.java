@@ -38,21 +38,21 @@ public class BookAuthor {
 	@Column(name = "google_api_book_reference")
 	private List<GoogleApiBook> googleApiBook;
 	
-	@Column(name = "total_google_api_books_uploaded_for_this_author")
+	@Column(name = "total_google_api_books_uploaded_for_this_author", nullable = false, columnDefinition = "INT DEFAULT 0")
 	private int totalGoogleApiBooksUploadedForThisAuthor;
 	
-	@Column(name = "total_books_uploaded_for_this_author")
+	@Column(name = "total_books_uploaded_for_this_author", nullable = false, columnDefinition = "INT DEFAULT 0")
 	private int totalBooksUploadedForThisAuthor;
 	
-	@Column(name = "rental_books_uploaded_for_this_author")
+	@Column(name = "rental_books_uploaded_for_this_author", nullable = false, columnDefinition = "INT DEFAULT 0")
 	private int rentalBooksUploadedForThisAuthor;
 	
-	@Column(name = "swap_books_uploaded_for_this_author")
+	@Column(name = "swap_books_uploaded_for_this_author", nullable = false, columnDefinition = "INT DEFAULT 0")
 	private int swapBooksUploadedForThisAuthor;
 	
-	@Column(name = "ongoing_interactions_for_this_author")
+	@Column(name = "ongoing_interactions_for_this_author", nullable = false, columnDefinition = "INT DEFAULT 0")
 	private int ongoingInteractionsForThisAuthor;
 	
-	@Column(name = "total_fulfilled_interactions_for_this_author")
+	@Column(name = "total_fulfilled_interactions_for_this_author", nullable = false, columnDefinition = "INT DEFAULT 0")
 	private int totalFulfilledInteractionForThisAuthor;	
 }

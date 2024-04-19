@@ -49,7 +49,7 @@ public class Book {
 	//multiple books in the local system will be associated to one particular book from google books api
 	//process will be to get the book details and then first call the google api, get data and create the googleAPiBook object(if not existing already) and then store it here
 	//many to one
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "google_api_book_reference")
 	private GoogleApiBook googleApiBook; //we first create the googleAPIBook object in the table and then use that reference
 	
@@ -58,36 +58,32 @@ public class Book {
 	@Column(name = "book_owner_reference")
 	private String bookOwner; //TODO String will be converted to the bookOwner (Type User) class reference
 	
-	@Column(name = "is_book_available")
+	@Column(name = "is_book_available", nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
 	@ColumnDefault("true")
 	@JsonProperty
 	private boolean isBookAvailable;
 	
-	@Column(name = "is_book_swapped")
+	@Column(name = "is_book_swapped", nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
 	@ColumnDefault("false")
 	@JsonProperty
 	private boolean isBookSwapped;
 	
-	@Column(name = "is_book_rented_at_this_time")
+	@Column(name = "is_book_rented_at_this_time", nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
 	@ColumnDefault("false")
 	@JsonProperty
 	private boolean isBookRentedAtThisTime;
 	
-	@Column(name = "is_book_for_rent")
+	@Column(name = "is_book_for_rent", nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
 	@ColumnDefault("false")
 	@JsonProperty
 	private boolean isBookForRent;
 	
-	@Column(name = "is_book_for_swap")
+	@Column(name = "is_book_for_swap", nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
 	@ColumnDefault("false")
 	@JsonProperty
 	private boolean isBookForSwap;
 	
-	@Column(name = "is_book_for_rent_and_swap")
-	@ColumnDefault("false")
-	@JsonProperty
-	private boolean isBookForRentAndSwap;
 	
-	@Column(name = "total_ongoing_interactions_for_this_book")
+	@Column(name = "total_ongoing_interactions_for_this_book", nullable = false, columnDefinition = "INT DEFAULT 0")
 	private int totalOngoingInteractionsForThisBook;
 }

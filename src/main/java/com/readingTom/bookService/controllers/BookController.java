@@ -114,13 +114,14 @@ public class BookController {
 			String incomingGoogleApiBookId = book.getGoogleApiBookId();
 			boolean isBookForRent = book.isBookForRent();
 			boolean isBookForSwap = book.isBookForSwap();
-			boolean isBookForRentAndSwap = book.isBookForRentAndSwap();
 			
+			
+			//verify the book: verification service
 			
 			log.info("****values coming in the system ::: incomingGoogleApiBookId " + incomingGoogleApiBookId);
-			log.info("**** isBookForRent " + isBookForRent + " :: isBookForSwap " + isBookForSwap + " :: isBookForRentAndSwap " + isBookForRentAndSwap ); 
+			log.info("**** isBookForRent " + isBookForRent + " :: isBookForSwap " + isBookForSwap  ); 
 			
-			GoogleApiBook googleApiBook = bookAdditionBusinessObject.addingOrUpdatingGoogleApiBook(incomingGoogleApiBookId, isBookForRent, isBookForSwap, isBookForRentAndSwap);
+			GoogleApiBook googleApiBook = bookAdditionBusinessObject.addingOrUpdatingGoogleApiBook(incomingGoogleApiBookId, isBookForRent, isBookForSwap);
 			
 			
 		    book.setGoogleApiBook(googleApiBook);
