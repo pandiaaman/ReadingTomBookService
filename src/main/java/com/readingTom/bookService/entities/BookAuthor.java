@@ -1,6 +1,12 @@
 package com.readingTom.bookService.entities;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,6 +40,7 @@ public class BookAuthor {
 	
 	
 	//many to many
+	@JsonIgnore
 	@ManyToMany(mappedBy = "googleApiBookAuthors") //the table that will be created now showing the combination of book with author will be handled by the book table's author value
 	@Column(name = "google_api_book_reference")
 	private List<GoogleApiBook> googleApiBook;
@@ -55,4 +62,12 @@ public class BookAuthor {
 	
 	@Column(name = "total_fulfilled_interactions_for_this_author", nullable = false, columnDefinition = "INT DEFAULT 0")
 	private int totalFulfilledInteractionForThisAuthor;	
+	
+	@CreationTimestamp
+	@Column(name = "book_author_created_at", nullable = false, updatable = false)
+	private LocalDateTime bookAuthorCreatedAt;
+	
+	@UpdateTimestamp
+	@Column(name = "book_author_updated_at")
+	private LocalDateTime bookAuthorUpdatedAt;
 }

@@ -1,7 +1,13 @@
 package com.readingTom.bookService.entities;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -61,6 +67,7 @@ public class GoogleApiBook {
 	//if the category exists in category table, we add a reference of that category in this column
 	//if it doesn't exist then we create a add to the category table and save that reference to this column
 	//many to many relationship
+	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL) //now we dont  need to save the category one separately, the moment we save google book api, the category will automatically be saved
 	@Column(name = "google_api_book_categories")
 	private List<BookCategory> googleApiBookCategories = new ArrayList<>(); //TODO: check if we need to initiate this as ArrayList();
@@ -68,6 +75,7 @@ public class GoogleApiBook {
 	//Note: the class in which we use cascase.ALL, we only need to save the object of that class in JPA
 	 
 	//many to many
+	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL) //table containing the mapping will be mapped by the bookAuthor column
 	@Column(name = "google_api_book_authors")
 	private List<BookAuthor> googleApiBookAuthors = new ArrayList<>();
@@ -89,6 +97,7 @@ public class GoogleApiBook {
 	
 	//one google api book will be having many books locally uploaded in the system
 	//one to many
+	@JsonIgnore
 	@OneToMany(mappedBy = "googleApiBook") //cascade: if we remove a google api book, all associated books will be removed along with it
 	private List<Book> uploadedBooksListForThisGoogleApiBook;
 	
@@ -107,4 +116,12 @@ public class GoogleApiBook {
 	
 	@Column(name = "total_fulfilled_interactions_for_this_google_api_book", columnDefinition = "INT DEFAULT 0")
 	private int totalFulfilledInteractionForThisGoogleApiBook;
+	
+	@CreationTimestamp
+	@Column(name = "google_api_book_created_at", nullable = false, updatable = false)
+	private LocalDateTime googleApiBookCreatedAt;
+	
+	@UpdateTimestamp
+	@Column(name = "google_api_book_updated_at")
+	private LocalDateTime googleApiBookUpdatedAt;
 }
