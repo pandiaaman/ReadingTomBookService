@@ -19,6 +19,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.readingTom.bookService.BusinessLogic.BookAddBO;
 import com.readingTom.bookService.customException.BookNotFoundException;
+import com.readingTom.bookService.dto.BookRequestDTO;
+import com.readingTom.bookService.dto.BookResponseDTO;
+import com.readingTom.bookService.dtoMappings.DTOMappings;
 import com.readingTom.bookService.entities.Book;
 import com.readingTom.bookService.entities.GoogleApiBook;
 import com.readingTom.bookService.repositories.GoogleApiBookRepository;
@@ -43,6 +46,9 @@ public class BookController {
 
 	@Autowired
 	private BookService bookService;
+	
+	@Autowired
+	private DTOMappings dtoMappings;
 
 	public BookController() {
 		super();
@@ -53,7 +59,7 @@ public class BookController {
 	
 	//getting books
 	@GetMapping(value = "/all", produces= {"application/json","application/xml"})
-	public ResponseEntity<List<Book>> getAllBooks(){
+	public ResponseEntity<List<BookResponseDTO>> getAllBooks(){
 		try {
 			log.info("BookController: getting all books...");
 			List<Book> allBooks = this.bookService.getAllBooks();
@@ -62,7 +68,17 @@ public class BookController {
 			if(allBooks.size() == 0) {
 				throw new BookNotFoundException("No books available in the system");
 			}
-			return ResponseEntity.status(HttpStatus.OK).body(allBooks);
+			
+			//converting output to DTOS\
+			List<BookResponseDTO> outgoingBooks = new ArrayList<>();
+			
+			for(Book book : allBooks) {
+				BookResponseDTO bookResponse = dtoMappings.mapBookToBookResponseDto(book);
+				
+				outgoingBooks.add(bookResponse);
+			}
+			
+			return ResponseEntity.status(HttpStatus.OK).body(outgoingBooks);
 		}catch(Exception e) {
 			log.error("error in getting all the books");
 			e.printStackTrace();
@@ -98,7 +114,7 @@ public class BookController {
 	@PostMapping(value = "/add",
 			produces= {"application/json","application/xml"},
 			consumes= {"application/json","application/xml"})
-	public ResponseEntity<Book> addBook(@RequestBody Book book) {
+	public ResponseEntity<BookResponseDTO> addBook(@RequestBody BookRequestDTO incomingBook) {
 		try {
 			log.info("BookController: adding the book...");
 			
@@ -111,12 +127,24 @@ public class BookController {
 			 * while creating that object, we take values from the list and create object for categories and authors
 			 * finally when all are added we save the googleapibook and then we save the book
 			 */
+			log.info("ISBOOKFORRENTAMAN: " + incomingBook.isBookForRent() + " " + incomingBook.isBookForSwap() + " "+ incomingBook.getGoogleApiBookId());
+			//converting to DTOs
+			Book book = dtoMappings.mapBookRequestDtoToBook(incomingBook);
+			
 			String incomingGoogleApiBookId = book.getGoogleApiBookId();
 			boolean isBookForRent = book.isBookForRent();
 			boolean isBookForSwap = book.isBookForSwap();
 			
 			
-			//verify the book: verification service
+			
+			//verify the book: verification service (synchronous call: book addition is not started until barcode is verified
+			/*
+			 * we pass the temporary barcode url to the service along with the book id and user added barcode isbn number
+			 * the verification service will check if the images are okay to be uploaded
+			 * it responds back with a json output showing the status of the verification
+			 * using this status if it is success we move forward with the book addition else 
+			 * else we call the notification service to inform user that the barcode verification has failed
+			 */
 			
 			log.info("****values coming in the system ::: incomingGoogleApiBookId " + incomingGoogleApiBookId);
 			log.info("**** isBookForRent " + isBookForRent + " :: isBookForSwap " + isBookForSwap  ); 
@@ -134,10 +162,12 @@ public class BookController {
 		    
 		    this.bookService.addBook(book);
 		    
+		    BookResponseDTO outgoingBook = dtoMappings.mapBookToBookResponseDto(book);
+		    
 //			Book addedBook = this.bookService.addBook(book);
 //			return ResponseEntity.status(HttpStatus.CREATED).body(addedBook);
 		    
-		    return ResponseEntity.status(HttpStatus.CREATED).body(null);
+		    return ResponseEntity.status(HttpStatus.CREATED).body(outgoingBook);
 		}catch(Exception e) {
 			log.error("error in adding the book");
 			e.printStackTrace(); 

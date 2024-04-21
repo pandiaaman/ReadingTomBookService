@@ -1,8 +1,14 @@
 package com.readingTom.bookService.entities;
 
 
-import org.hibernate.annotations.ColumnDefault;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
@@ -49,14 +55,19 @@ public class Book {
 	//multiple books in the local system will be associated to one particular book from google books api
 	//process will be to get the book details and then first call the google api, get data and create the googleAPiBook object(if not existing already) and then store it here
 	//many to one
+	@JsonIgnore //so that complete details do NOT show up in GET request
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "google_api_book_reference")
 	private GoogleApiBook googleApiBook; //we first create the googleAPIBook object in the table and then use that reference
 	
 	
 	//coming from the user service brining in the user id who uploaded the book
+	@Column(name = "book_owner_reference_id")
+	private String bookOwnerId; //TODO String will be converted to the bookOwner (Type User) class reference
+	
+	@JsonIgnore
 	@Column(name = "book_owner_reference")
-	private String bookOwner; //TODO String will be converted to the bookOwner (Type User) class reference
+	private String bookOwner; 
 	
 	@Column(name = "is_book_available", nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
 	@ColumnDefault("true")
@@ -83,7 +94,48 @@ public class Book {
 	@JsonProperty
 	private boolean isBookForSwap;
 	
-	
 	@Column(name = "total_ongoing_interactions_for_this_book", nullable = false, columnDefinition = "INT DEFAULT 0")
 	private int totalOngoingInteractionsForThisBook;
+	
+	@CreationTimestamp
+	@Column(name = "book_created_at", nullable = false, updatable = false)
+	private LocalDateTime bookCreatedAt;
+	
+	@UpdateTimestamp
+	@Column(name = "book_updated_at")
+	private LocalDateTime bookUpdatedAt;
+	
+	
+	@Column(name = "user_uploaded_book_image_1_temporary_url", columnDefinition = "VARCHAR(512) DEFAULT ''")
+	private String userUploadedBookImage1TemporaryUrl;
+	
+	@Column(name = "user_uploaded_book_image_2_temporary_url", columnDefinition = "VARCHAR(512) DEFAULT ''")
+	private String userUploadedBookImage2TemporaryUrl;
+	
+	@Column(name = "user_uploaded_book_barcode_image_temporary_url", columnDefinition = "VARCHAR(512) DEFAULT ''")
+	private String userUploadedBookBarcodeImageTemporaryUrl;
+
+	@Column(name = "user_uploaded_book_image_1_permanent_url", columnDefinition = "VARCHAR(512) DEFAULT ''")
+	private String userUploadedBookImage1PermanentUrl;
+	
+	@Column(name = "user_uploaded_book_image_2_permanent_url", columnDefinition = "VARCHAR(512) DEFAULT ''")
+	private String userUploadedBookImage2PermanentUrl;
+	
+	@Column(name = "user_uploaded_book_barcode_image_permanent_url", columnDefinition = "VARCHAR(512) DEFAULT ''")
+	private String userUploadedBookBarcodeImagePermanentUrl;
+	
+	//user can upload either bar code or isbn value of the book: front end will only allow any one
+	@Column(name = "user_uploaded_book_barcode_isbn_value", columnDefinition = "VARCHAR(512) DEFAULT ''")
+	private String userUploadedBookBarcodeIsbnValue;
+	
+	@Column(name = "user_uploaded_book_details", columnDefinition = "VARCHAR(512) DEFAULT ''")
+	private String userUploadedBookDetails;
+	
+	
+	//this column is updated by Kafka event once the images are verified by the image verification service
+	@Column(name = "is_book_verified", nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
+	@ColumnDefault("false")
+	@JsonProperty
+	private boolean isBookVerified;
+	
 }
