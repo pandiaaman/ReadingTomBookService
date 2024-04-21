@@ -1,8 +1,10 @@
 package com.readingTom.bookService.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,10 +12,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import com.readingTom.bookService.dtoMappings.DTOMappings;
+import com.readingTom.bookService.entities.Book;
 import com.readingTom.bookService.entities.BookCategory;
+import com.readingTom.bookService.entities.GoogleApiBook;
 import com.readingTom.bookService.services.BookCategoryService;
+import com.readingTom.bookService.services.GoogleApiBookService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,6 +32,14 @@ public class BookCategoryController {
 
 	@Autowired
 	private BookCategoryService bookCategoryService;
+	
+	@Autowired
+	@Lazy
+	private GoogleApiBookService googleApiBookService;
+	
+	@Autowired
+	@Lazy
+	private DTOMappings dtoMappings;
 
 	public BookCategoryController(BookCategoryService bookCategoryService) {
 		super();
@@ -50,7 +66,7 @@ public class BookCategoryController {
 		}
 		//get category by id
 		@GetMapping(value = "/{categoryId}", produces= {"application/json","application/xml"})
-		public ResponseEntity<BookCategory> getOneAuthor(@PathVariable String categoryId) {
+		public ResponseEntity<BookCategory> getOneCategory(@PathVariable String categoryId) {
 			try {
 				log.info("BookCategoryController:: getOneAuthor:: getting category with id " + categoryId);
 				BookCategory category = this.bookCategoryService.getBookCategoriesById(categoryId);
@@ -80,5 +96,46 @@ public class BookCategoryController {
 			 
 		}
 	
+		
+		//other requests
+		@GetMapping(value = "byname/googleapibooks", produces= {"application/json","application/xml"})
+		public ResponseEntity<List<GoogleApiBook>> getAllGoogleApiBooksUploadedForThisCategory(@RequestParam String category){
+			try {
+				String decodedCategoryName = UriComponentsBuilder.fromPath(category).build().toString();
+				
+				List<GoogleApiBook> fetchedBooks = this.bookCategoryService.getAllGoogleApiBooksUploadedForThisCategory(decodedCategoryName);
+				
+				return ResponseEntity.status(HttpStatus.OK).body(fetchedBooks);
+			}catch(Exception e) {
+				log.error("error in getting google api books for the given category");
+			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+		
+		@GetMapping(value = "byname/books", produces= {"application/json","application/xml"})
+		public ResponseEntity<List<Book>> getAllBooksUploadedForThisCategory(@RequestParam String category){
+			try {
+				log.info("BookCategoryController :: getAllBooksUploadedForThisCategory");
+				// Decode the authorName if it's encoded
+		        String decodedCategoryName = UriComponentsBuilder.fromPath(category).build().toString();
+
+				List<GoogleApiBook> fetchedGoogleApiBooks = this.bookCategoryService.getAllGoogleApiBooksUploadedForThisCategory(decodedCategoryName);
+			
+				List<Book> booksResultSet = new ArrayList<>();
+				
+				for(GoogleApiBook googleApiBook : fetchedGoogleApiBooks) {
+					String googleApiBookId = googleApiBook.getGoogleApiBookId();
+					
+					List<Book> booksForGivenId = googleApiBookService.getAllBooksForGivenGoogleApiBook(googleApiBookId);
+					
+					booksResultSet.addAll(booksForGivenId);
+				}
+				
+				return ResponseEntity.status(HttpStatus.OK).body(booksResultSet);
+			}catch(Exception e) {
+				log.error("error in getting google api books for the given category");
+			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
 	
 }

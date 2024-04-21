@@ -127,6 +127,7 @@ public class DTOMappingsImpl implements DTOMappings{
 		googleApiBookResponse.setGoogleApiBookId(googleApiBook.getGoogleApiBookId());
 		googleApiBookResponse.setGoogleApiBookTitle(googleApiBook.getGoogleApiBookTitle());
 		googleApiBookResponse.setGoogleApiBookSubTitle(googleApiBook.getGoogleApiBookSubTitle());
+		googleApiBookResponse.setBooksIdUploadedForThisGoogleApiBook(fetchIdOfAllBooksUploadedForThisGoogleApiBook(googleApiBook.getUploadedBooksListForThisGoogleApiBook()));
 		//prepare list of categories and author details that we need to show
 		googleApiBookResponse.setGoogleApiBookAuthors(prepareBookAuthorListForGoogleApiBook(googleApiBook.getGoogleApiBookAuthors()));
 		googleApiBookResponse.setGoogleApiBookCategories(prepareBookCategoryListForGoogleApiBook(googleApiBook.getGoogleApiBookCategories()));
@@ -151,6 +152,19 @@ public class DTOMappingsImpl implements DTOMappings{
 		return googleApiBookResponse;
 	}
 
+	
+	public List<String> fetchIdOfAllBooksUploadedForThisGoogleApiBook(List<Book> booksUploadedForThisGoogleApiBook){
+		
+		List<String> booksIdList = new ArrayList<>();
+		
+		if(booksUploadedForThisGoogleApiBook.size() > 0) {
+			for(Book book : booksUploadedForThisGoogleApiBook) {
+				booksIdList.add(book.getBookId());
+			}
+		}
+		
+		return booksIdList;
+	}
 	
 	public List<BookAuthorResponseDTO> prepareBookAuthorListForGoogleApiBook(List<BookAuthor> authors){
 		

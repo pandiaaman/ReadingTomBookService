@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.readingTom.bookService.entities.BookAuthor;
+import com.readingTom.bookService.entities.GoogleApiBook;
 
 public interface BookAuthorService {
 
@@ -18,4 +19,6 @@ public interface BookAuthorService {
 	public BookAuthor addBookAuthor(BookAuthor book);
 
 	public BookAuthor findByAuthorName(String authorName); 
+	
+	public List<GoogleApiBook> getAllGoogleApiBooksUploadedForThisAuthor(String authorName);
 }

@@ -33,6 +33,9 @@ public class GoogleApiBookResponseDTO {
 	
 	private String googleApiBookSubTitle;
 	
+	//contains id of all books that are uploaded for this google api book
+	private List<String> booksIdUploadedForThisGoogleApiBook;
+	
 	private String googleApiBookThumbnailUrl;
 
 	private String googleApiBookSmallThumbnailUrl;
