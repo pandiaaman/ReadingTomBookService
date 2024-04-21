@@ -1,11 +1,13 @@
 package com.readingTom.bookService.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.readingTom.bookService.customException.GoogleApiBookNotFoundException;
+import com.readingTom.bookService.entities.Book;
 import com.readingTom.bookService.entities.GoogleApiBook;
 import com.readingTom.bookService.repositories.GoogleApiBookRepository;
 import com.readingTom.bookService.services.GoogleApiBookService;
@@ -51,6 +53,26 @@ public class GoogleApiBookServiceImpl implements GoogleApiBookService {
 		log.info("adding a google api book");
 		GoogleApiBook addedBook = this.googleApiBookRepository.save(book);
 		return addedBook;
+	}
+
+	@Override
+	public List<Book> getAllBooksForGivenGoogleApiBook(String googleApiBookid) {
+		
+		log.info("getting all the locally uploaded books for a given book id");
+		
+		List<Book> fetchedBooks = new ArrayList<>();
+		
+		try {
+			GoogleApiBook googleApiBook = getGoogleApiBookById(googleApiBookid);
+			
+			fetchedBooks = googleApiBook.getUploadedBooksListForThisGoogleApiBook();
+		}catch(Exception e) {
+			log.error("ERROR: no google api book found by id : " + googleApiBookid);
+		}
+		
+		 
+		
+		return fetchedBooks;
 	}
 
 }

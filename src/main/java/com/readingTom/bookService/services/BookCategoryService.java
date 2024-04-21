@@ -5,6 +5,7 @@ import java.util.Optional;
 
 
 import com.readingTom.bookService.entities.BookCategory;
+import com.readingTom.bookService.entities.GoogleApiBook;
 
 
 public interface BookCategoryService {
@@ -20,4 +21,7 @@ public interface BookCategoryService {
 	
 	//find the category by name //custom finder methods
 	public BookCategory findByCategoryName(String categoryName);
+	
+	//find googleApiBooks by category
+	public List<GoogleApiBook> getAllGoogleApiBooksUploadedForThisCategory(String categoryName);
 }

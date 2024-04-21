@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.readingTom.bookService.customException.AuthorNotFoundException;
 import com.readingTom.bookService.entities.BookAuthor;
+import com.readingTom.bookService.entities.BookCategory;
+import com.readingTom.bookService.entities.GoogleApiBook;
 import com.readingTom.bookService.repositories.BookAuthorRepository;
 import com.readingTom.bookService.services.BookAuthorService;
 
@@ -58,6 +60,17 @@ public class BookAuthorServiceImpl implements BookAuthorService{
 		BookAuthor fetchedAuthor = authorByName.orElse(null);
 		
 		return fetchedAuthor;
+	}
+
+	@Override
+	public List<GoogleApiBook> getAllGoogleApiBooksUploadedForThisAuthor(String authorName) {
+		log.info("BookAuthorServiceImpl :: getAllGoogleApiBooksUploadedForThisAuthor");
+		
+		BookAuthor bookAuthor = findByAuthorName(authorName);
+		
+		List<GoogleApiBook> googleApiBooks = bookAuthor.getGoogleApiBook();
+		
+		return googleApiBooks;
 	}
 
 }

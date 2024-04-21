@@ -3,10 +3,13 @@ package com.readingTom.bookService.services.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.readingTom.bookService.customException.CategoryNotFoundException;
 import com.readingTom.bookService.entities.BookCategory;
+import com.readingTom.bookService.entities.GoogleApiBook;
 import com.readingTom.bookService.repositories.BookCategoryRepository;
 import com.readingTom.bookService.services.BookCategoryService;
 
@@ -58,6 +61,17 @@ public class BookCategoryServiceImpl implements BookCategoryService{
 		BookCategory fetchedCategory = categoryByName.orElse(null);
 		
 		return fetchedCategory;
+	}
+	
+	public List<GoogleApiBook> getAllGoogleApiBooksUploadedForThisCategory(String categoryName){
+		log.info("BookCategoryServiceImpl :: getAllGoogleApiBooksUploadedForThisCategory");
+		
+		BookCategory bookCategory = findByCategoryName(categoryName);
+		
+		List<GoogleApiBook> googleApiBooks = bookCategory.getGoogleApiBook();
+		
+		return googleApiBooks;
+		
 	}
 
 }

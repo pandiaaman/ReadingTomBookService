@@ -88,12 +88,14 @@ public class BookController {
 	
 	//get one book
 	@GetMapping(value = "/{bookId}", produces= {"application/json","application/xml"})
-	public ResponseEntity<Book> getOneBook(@PathVariable String bookId) {
+	public ResponseEntity<BookResponseDTO> getOneBook(@PathVariable String bookId) {
 		try {
 			log.info("BookController: getting book with id " + bookId);
 			Book book = this.bookService.getBookById(bookId);
 			
-			return ResponseEntity.status(HttpStatus.OK).body(book);
+			BookResponseDTO bookResponse = dtoMappings.mapBookToBookResponseDto(book);
+			
+			return ResponseEntity.status(HttpStatus.OK).body(bookResponse);
 		}catch(Exception e) {
 			log.error("error in getting the book");
 			e.printStackTrace(); //TODO we can throw the book not found exception here (custom exception)

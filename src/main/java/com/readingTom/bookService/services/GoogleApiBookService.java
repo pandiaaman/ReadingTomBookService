@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.readingTom.bookService.entities.Book;
 import com.readingTom.bookService.entities.GoogleApiBook;
 
 
@@ -19,4 +20,6 @@ public interface GoogleApiBookService {
 		
 	//create/add a google api book
 	public GoogleApiBook addGoogleApiBook(GoogleApiBook book);
+	
+	public List<Book> getAllBooksForGivenGoogleApiBook(String googleApiBookid);
 }
