@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -55,14 +59,23 @@ public class BookController {
 		log.info("inside book controller...");
 	}
 	
-	//TODO: add get book by different field methods
 	
+	//http://localhost:8081/bookservice/book/all?page=0&size=8&ascending=false&sortby=bookId
 	//getting books
 	@GetMapping(value = "/all", produces= {"application/json","application/xml"})
-	public ResponseEntity<List<BookResponseDTO>> getAllBooks(){
+	public ResponseEntity<List<BookResponseDTO>> getAllBooks(
+			@RequestParam(defaultValue = "0") int page, 
+			@RequestParam(defaultValue = "2") int size,
+			@RequestParam(defaultValue = "true") boolean ascending,
+			@RequestParam(defaultValue = "bookCreatedAt") String sortby){
 		try {
-			log.info("BookController: getting all books...");
-			List<Book> allBooks = this.bookService.getAllBooks();
+			log.info("BookController: getting all books..." + page + " " + size + " " + ascending + " " + sortby);
+			
+			List<Sort.Order> sortOrder = Arrays.asList(new Sort.Order(ascending?Sort.Direction.ASC:Sort.Direction.DESC, sortby));
+			
+			Pageable pageable = PageRequest.of(page, size, Sort.by(sortOrder));
+			
+			List<Book> allBooks = this.bookService.getAllBooks(pageable);
 			
 			//if books fetched array is empty
 			if(allBooks.size() == 0) {
@@ -85,6 +98,184 @@ public class BookController {
 		}
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
+	
+	/*
+	 * 
+	 */
+	@GetMapping(value = "/forrentbyowner/{ownerId}", produces = {"application/json","application/xml"})
+	public ResponseEntity<List<BookResponseDTO>> getAllVerifiedAvailableBooksByOwnerIdForRent(
+			@PathVariable String ownerId,
+			@RequestParam(defaultValue = "0") int page, 
+			@RequestParam(defaultValue = "2") int size,
+			@RequestParam(defaultValue = "true") boolean ascending,
+			@RequestParam(defaultValue = "bookCreatedAt") String sortby
+			){
+		
+		try {
+			log.info("BookController :: getAllVerifiedAvailableBooksByOwnerIdForRent");
+			
+			List<Sort.Order> sortOrder = Arrays.asList(new Sort.Order(ascending?Sort.Direction.ASC:Sort.Direction.DESC, sortby));
+			
+			Pageable pageable = PageRequest.of(page, size, Sort.by(sortOrder));
+			
+			List<Book> allVerifiedAvailableBooksByOwnerIdForRent = this.bookService.getBooksByBookOwnerIdAndIsBookAvailableAndIsBookForRentAndIsBookVerified(ownerId, true, pageable);
+			
+			
+			//if books fetched array is empty
+			if(allVerifiedAvailableBooksByOwnerIdForRent.size() == 0) {
+				throw new BookNotFoundException("No books available in the system");
+			}
+			
+			//converting output to DTOS\
+			List<BookResponseDTO> outgoingBooks = new ArrayList<>();
+			
+			for(Book book : allVerifiedAvailableBooksByOwnerIdForRent) {
+				BookResponseDTO bookResponse = dtoMappings.mapBookToBookResponseDto(book);
+				
+				outgoingBooks.add(bookResponse);
+			}
+			
+			return ResponseEntity.status(HttpStatus.OK).body(outgoingBooks);
+		}catch(Exception e) {
+			log.error("error in getting all the books");
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
+	
+	/*
+	 * 
+	 */
+	@GetMapping(value = "/forswapbyowner/{ownerId}", produces = {"application/json","application/xml"})
+	public ResponseEntity<List<BookResponseDTO>> getAllVerifiedAvailableBooksByOwnerIdForSwap(
+			@PathVariable String ownerId,
+			@RequestParam(defaultValue = "0") int page, 
+			@RequestParam(defaultValue = "2") int size,
+			@RequestParam(defaultValue = "true") boolean ascending,
+			@RequestParam(defaultValue = "bookCreatedAt") String sortby
+			){
+		
+		try {
+			log.info("BookController :: getAllVerifiedAvailableBooksByOwnerIdForSwap");
+			
+			List<Sort.Order> sortOrder = Arrays.asList(new Sort.Order(ascending?Sort.Direction.ASC:Sort.Direction.DESC, sortby));
+			
+			Pageable pageable = PageRequest.of(page, size, Sort.by(sortOrder));
+			
+			List<Book> allVerifiedAvailableBooksByOwnerIdForSwap = this.bookService.getBooksByBookOwnerIdAndIsBookAvailableAndIsBookForSwapAndIsBookVerified(ownerId, true, pageable);
+			
+			
+			//if books fetched array is empty
+			if(allVerifiedAvailableBooksByOwnerIdForSwap.size() == 0) {
+				throw new BookNotFoundException("No books available in the system");
+			}
+			
+			//converting output to DTOS\
+			List<BookResponseDTO> outgoingBooks = new ArrayList<>();
+			
+			for(Book book : allVerifiedAvailableBooksByOwnerIdForSwap) {
+				BookResponseDTO bookResponse = dtoMappings.mapBookToBookResponseDto(book);
+				
+				outgoingBooks.add(bookResponse);
+			}
+			
+			return ResponseEntity.status(HttpStatus.OK).body(outgoingBooks);
+		}catch(Exception e) {
+			log.error("error in getting all the books");
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		
+	}
+	
+	@GetMapping(value = "/forrentbygooglebook/{googleApiBookId}", produces = {"application/json","application/xml"})
+	public ResponseEntity<List<BookResponseDTO>> getAllVerifiedAvailableBooksByGoogleApiIdForRent(
+			@PathVariable String googleApiBookId,
+			@RequestParam(defaultValue = "0") int page, 
+			@RequestParam(defaultValue = "2") int size,
+			@RequestParam(defaultValue = "true") boolean ascending,
+			@RequestParam(defaultValue = "bookCreatedAt") String sortby
+			){
+		try {
+			log.info("BookController :: getAllVerifiedAvailableBooksByGoogleApiIdForRent");
+			
+			List<Sort.Order> sortOrder = Arrays.asList(new Sort.Order(ascending?Sort.Direction.ASC:Sort.Direction.DESC, sortby));
+			
+			Pageable pageable = PageRequest.of(page, size, Sort.by(sortOrder));
+			
+			List<Book> allVerifiedAvailableBooksByGoogleApiBookIdForRent = this.bookService.getBooksByGoogleApiBookIdAndIsBookAvailableAndIsBookForRentAndIsBookVerified(googleApiBookId, true, pageable);
+			
+			
+			//if books fetched array is empty
+			if(allVerifiedAvailableBooksByGoogleApiBookIdForRent.size() == 0) {
+				throw new BookNotFoundException("No books available in the system");
+			}
+			
+			//converting output to DTOS\
+			List<BookResponseDTO> outgoingBooks = new ArrayList<>();
+			
+			for(Book book : allVerifiedAvailableBooksByGoogleApiBookIdForRent) {
+				BookResponseDTO bookResponse = dtoMappings.mapBookToBookResponseDto(book);
+				
+				outgoingBooks.add(bookResponse);
+			}
+			
+			return ResponseEntity.status(HttpStatus.OK).body(outgoingBooks);
+		}catch(Exception e) {
+			log.error("error in getting all the books");
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
+	
+	@GetMapping(value = "/forswapbygooglebook/{googleApiBookId}", produces = {"application/json","application/xml"})
+	public ResponseEntity<List<BookResponseDTO>> getAllVerifiedAvailableBooksByGoogleApiIdForSwap(
+			@PathVariable String googleApiBookId,
+			@RequestParam(defaultValue = "0") int page, 
+			@RequestParam(defaultValue = "2") int size,
+			@RequestParam(defaultValue = "true") boolean ascending,
+			@RequestParam(defaultValue = "bookCreatedAt") String sortby
+			){
+		
+		try {
+			log.info("BookController :: getAllVerifiedAvailableBooksByGoogleApiIdForSwap");
+			
+			List<Sort.Order> sortOrder = Arrays.asList(new Sort.Order(ascending?Sort.Direction.ASC:Sort.Direction.DESC, sortby));
+			
+			Pageable pageable = PageRequest.of(page, size, Sort.by(sortOrder));
+			
+			List<Book> allVerifiedAvailableBooksByGoogleApiBookIdForSwap = this.bookService.getBooksByGoogleApiBookIdAndIsBookAvailableAndIsBookForSwapAndIsBookVerified(googleApiBookId, true, pageable);
+			
+			
+			//if books fetched array is empty
+			if(allVerifiedAvailableBooksByGoogleApiBookIdForSwap.size() == 0) {
+				throw new BookNotFoundException("No books available in the system");
+			}
+			
+			//converting output to DTOS\
+			List<BookResponseDTO> outgoingBooks = new ArrayList<>();
+			
+			for(Book book : allVerifiedAvailableBooksByGoogleApiBookIdForSwap) {
+				BookResponseDTO bookResponse = dtoMappings.mapBookToBookResponseDto(book);
+				
+				outgoingBooks.add(bookResponse);
+			}
+			
+			return ResponseEntity.status(HttpStatus.OK).body(outgoingBooks);
+		}catch(Exception e) {
+			log.error("error in getting all the books");
+			e.printStackTrace();
+		}
+		
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		
+	}
+	
+	
+	
 	
 	//get one book
 	@GetMapping(value = "/{bookId}", produces= {"application/json","application/xml"})

@@ -3,6 +3,9 @@ package com.readingTom.bookService.services.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.readingTom.bookService.customException.BookNotFoundException;
@@ -26,11 +29,56 @@ public class BookServiceImpl implements BookService{
 	}
 	
 	@Override
-	public List<Book> getAllBooks() {
+	public List<Book> getAllBooks(Pageable pageable) {
 		log.info("BookService:: fetching all books...");
 		
-		List<Book> books = this.bookRepository.findAll();
+		//this handles the pagination of the results  (NOTICE how we have added PagingAndSortingRepository to BookRepository)
+		Page<Book> booksPage = this.bookRepository.findAll(pageable);
+		List<Book> books = booksPage.getContent();
 		return books;
+	}
+	
+	//
+	public List<Book> getBooksByBookOwnerIdAndIsBookAvailableAndIsBookForRentAndIsBookVerified(String ownerId, boolean isBookForRent, Pageable pageable){
+		log.info("BookService :: getBooksByBookOwnerIdAndIsBookAvailableAndIsBookForRentAndIsBookVerified...");
+		
+		Page<Book> booksPage = this.bookRepository.findByBookOwnerIdAndIsBookAvailableAndIsBookForRentAndIsBookVerified(ownerId, true, isBookForRent, true, pageable);
+		List<Book> books = booksPage.getContent();
+		
+		return books;
+	
+	}
+	
+	//
+	public List<Book> getBooksByBookOwnerIdAndIsBookAvailableAndIsBookForSwapAndIsBookVerified(String ownerId, boolean isBookForSwap, Pageable pageable){
+		log.info("BookService :: getBooksByBookOwnerIdAndIsBookAvailableAndIsBookForRentAndIsBookVerified...");
+		
+		Page<Book> booksPage = this.bookRepository.findByBookOwnerIdAndIsBookAvailableAndIsBookForSwapAndIsBookVerified(ownerId, true, isBookForSwap, true, pageable);
+		List<Book> books = booksPage.getContent();
+		
+		return books;
+	
+	}
+	
+	//
+	public List<Book> getBooksByGoogleApiBookIdAndIsBookAvailableAndIsBookForRentAndIsBookVerified(String googleApiBookId, boolean isBookForRent, Pageable pageable){
+		log.info("BookService :: getBooksByBookOwnerIdAndIsBookAvailableAndIsBookForRentAndIsBookVerified...");
+		
+		Page<Book> booksPage = this.bookRepository.findByGoogleApiBookIdAndIsBookAvailableAndIsBookForRentAndIsBookVerified(googleApiBookId, true, isBookForRent, true, pageable);
+		List<Book> books = booksPage.getContent();
+		
+		return books;
+	
+	}
+	
+	public List<Book> getBooksByGoogleApiBookIdAndIsBookAvailableAndIsBookForSwapAndIsBookVerified(String googleApiBookId, boolean isBookForSwap, Pageable pageable){
+		log.info("BookService :: getBooksByBookOwnerIdAndIsBookAvailableAndIsBookForRentAndIsBookVerified...");
+		
+		Page<Book> booksPage = this.bookRepository.findByGoogleApiBookIdAndIsBookAvailableAndIsBookForSwapAndIsBookVerified(googleApiBookId, true, isBookForSwap, true, pageable);
+		List<Book> books = booksPage.getContent();
+		
+		return books;
+	
 	}
 
 	@Override

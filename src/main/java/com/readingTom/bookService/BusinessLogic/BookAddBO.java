@@ -247,14 +247,20 @@ public class BookAddBO {
 		
 		
 		//we get the list of categories and authors and add it here to the googleApiBook
+
+		
+		List<BookCategory> googleApiBookCategories = null;
+		List<BookAuthor> googleApiBookAuthors = null;
+				
+		if(volumeInfo!=null) {
 //--->	//adding category
-		
-		List<BookCategory> googleApiBookCategories = getGoogleApiBookCategories(googleApiBook, volumeInfo, isBookForRent, isBookForSwap);
-		googleApiBook.setGoogleApiBookCategories(googleApiBookCategories);
-		
+			googleApiBookCategories = getGoogleApiBookCategories(googleApiBook, volumeInfo, isBookForRent, isBookForSwap);
 //--->	//adding author
-		
-		List<BookAuthor> googleApiBookAuthors = getGoogleApiBookAuthors(googleApiBook, volumeInfo, isBookForRent, isBookForSwap);
+			googleApiBookAuthors = getGoogleApiBookAuthors(googleApiBook, volumeInfo, isBookForRent, isBookForSwap);
+		}
+				
+		googleApiBook.setGoogleApiBookCategories(googleApiBookCategories);
+
 		googleApiBook.setGoogleApiBookAuthors(googleApiBookAuthors);
 		
 		return googleApiBook;
@@ -347,7 +353,35 @@ public class BookAddBO {
 		List<String> categories = new ArrayList<>();
 		
 		if(volumeInfo!=null) {
-			categories = volumeInfo.getCategories();
+			List<String> incomingCategories = volumeInfo.getCategories();
+			
+			//for each category=> check if that category has / => if yes take before and after values of / and add to categories list
+			for(String category : incomingCategories) {
+				log.info("incoming category added :: " + category.trim());
+				categories.add(category.trim()); //adding the main category (from google api) to the categories list
+				//here categories come in array form and are divided by /
+				if(category.contains("/")) {
+					//we keep checking until there is a / and we keep storing those string to categories list
+					while(category.contains("/")) {
+						int indexOfSlash = category.indexOf('/');
+						
+						String strPart = category.substring(0, indexOfSlash).trim();
+						
+						if(!categories.contains(strPart.trim())) {
+							log.info("sub category added :: " + strPart);
+							categories.add(strPart.trim());
+						}
+						
+						
+						category = category.substring(indexOfSlash+1);
+					}
+				}
+				if(!categories.contains(category.trim())){
+					log.info("final category added :: " + category.trim());
+					categories.add(category.trim()); //adding the last remaining one
+				}
+				
+			}
 		}
 		
 		log.info("number of categories associated with this book are : " + categories.size());

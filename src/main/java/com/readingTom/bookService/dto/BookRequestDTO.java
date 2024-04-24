@@ -21,6 +21,10 @@ public class BookRequestDTO {
 	@JsonProperty
 	private boolean isBookForSwap;
 	
+	private int bookRentalPricePerDay;
+	
+	private String bookRentalPricePerDayCurrency;
+	
 	private String userUploadedBookImage1TemporaryUrl;
 	
 	private String userUploadedBookImage2TemporaryUrl;
