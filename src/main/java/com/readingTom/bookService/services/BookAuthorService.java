@@ -20,5 +20,7 @@ public interface BookAuthorService {
 
 	public BookAuthor findByAuthorName(String authorName); 
 	
-	public List<GoogleApiBook> getAllGoogleApiBooksUploadedForThisAuthor(String authorName);
+	public List<GoogleApiBook> getAllGoogleApiBooksUploadedForThisAuthorName(String authorName);
+	
+	public List<GoogleApiBook> getAllGoogleApiBooksUploadedForThisAuthorId(String authorId);
 }

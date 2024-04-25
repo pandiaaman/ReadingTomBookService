@@ -63,10 +63,21 @@ public class BookAuthorServiceImpl implements BookAuthorService{
 	}
 
 	@Override
-	public List<GoogleApiBook> getAllGoogleApiBooksUploadedForThisAuthor(String authorName) {
+	public List<GoogleApiBook> getAllGoogleApiBooksUploadedForThisAuthorName(String authorName) {
 		log.info("BookAuthorServiceImpl :: getAllGoogleApiBooksUploadedForThisAuthor");
 		
 		BookAuthor bookAuthor = findByAuthorName(authorName);
+		
+		List<GoogleApiBook> googleApiBooks = bookAuthor.getGoogleApiBook();
+		
+		return googleApiBooks;
+	}
+
+	@Override
+	public List<GoogleApiBook> getAllGoogleApiBooksUploadedForThisAuthorId(String authorId) {
+		log.info("BookAuthorServiceImpl :: getAllGoogleApiBooksUploadedForThisAuthorId");
+		
+		BookAuthor bookAuthor = getBookAuthorsById(authorId);
 		
 		List<GoogleApiBook> googleApiBooks = bookAuthor.getGoogleApiBook();
 		

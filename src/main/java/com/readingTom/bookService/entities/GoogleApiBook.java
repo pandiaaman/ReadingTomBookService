@@ -17,6 +17,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,6 +34,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "google_api_book_table")
 public class GoogleApiBook {
 
@@ -53,13 +55,13 @@ public class GoogleApiBook {
 	@Column(name = "google_api_book_small_thumbnail_url", columnDefinition = "VARCHAR(255) DEFAULT ''")
 	private String googleApiBookSmallThumbnailUrl;
 	
-	@Column(name = "google_api_book_publisher", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT ''")
+	@Column(name = "google_api_book_publisher", columnDefinition = "VARCHAR(255) DEFAULT ''")
 	private String googleApiBookPublisher;
 	
-	@Column(name = "google_api_book_publish_date", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT ''")
+	@Column(name = "google_api_book_publish_date", columnDefinition = "VARCHAR(255) DEFAULT ''")
 	private String googleApiBookPublishedDate;
 	
-	@Column(name = "google_api_book_page_count", nullable = false, columnDefinition = "INT DEFAULT 0")
+	@Column(name = "google_api_book_page_count", columnDefinition = "INT DEFAULT 0")
 	private int googleApiBookPageCount;
 	
 	//when the categories come in, we take the array of the string, select each value and check if they exist in BookCategory table
@@ -117,7 +119,7 @@ public class GoogleApiBook {
 	private int totalFulfilledInteractionForThisGoogleApiBook;
 	
 	@CreationTimestamp
-	@Column(name = "google_api_book_created_at", nullable = false, updatable = false)
+	@Column(name = "google_api_book_created_at", updatable = false)
 	private LocalDateTime googleApiBookCreatedAt;
 	
 	@UpdateTimestamp

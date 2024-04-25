@@ -63,7 +63,7 @@ public class BookCategoryServiceImpl implements BookCategoryService{
 		return fetchedCategory;
 	}
 	
-	public List<GoogleApiBook> getAllGoogleApiBooksUploadedForThisCategory(String categoryName){
+	public List<GoogleApiBook> getAllGoogleApiBooksUploadedForThisCategoryName(String categoryName){
 		log.info("BookCategoryServiceImpl :: getAllGoogleApiBooksUploadedForThisCategory");
 		
 		BookCategory bookCategory = findByCategoryName(categoryName);
@@ -72,6 +72,18 @@ public class BookCategoryServiceImpl implements BookCategoryService{
 		
 		return googleApiBooks;
 		
+	}
+
+	@Override
+	public List<GoogleApiBook> getAllGoogleApiBooksUploadedForThisCategoryId(String categoryId) {
+		
+		log.info("BookCategoryServiceImpl :: getAllGoogleApiBooksUploadedForThisCategoryId");
+		
+		BookCategory bookCategory = getBookCategoriesById(categoryId);
+		
+		List<GoogleApiBook> googleApiBooks = bookCategory.getGoogleApiBook();
+		
+		return googleApiBooks;
 	}
 
 }
