@@ -32,6 +32,9 @@ public class DTOMappingsImpl implements DTOMappings{
 		book.setGoogleApiBookId(bookRequestDto.getGoogleApiBookId());
 		book.setBookForRent(bookRequestDto.isBookForRent());
 		book.setBookForSwap(bookRequestDto.isBookForSwap());
+		//adding price per day columns and their mappings
+		book.setBookRentalPricePerDay(bookRequestDto.getBookRentalPricePerDay());
+		book.setBookRentalPricePerDayCurrency(bookRequestDto.getBookRentalPricePerDayCurrency());
 		book.setUserUploadedBookImage1TemporaryUrl(bookRequestDto.getUserUploadedBookImage1TemporaryUrl());
 		book.setUserUploadedBookImage2TemporaryUrl(bookRequestDto.getUserUploadedBookImage2TemporaryUrl());
 		book.setUserUploadedBookBarcodeImageTemporaryUrl(bookRequestDto.getUserUploadedBookBarcodeImageTemporaryUrl());
@@ -76,6 +79,10 @@ public class DTOMappingsImpl implements DTOMappings{
 //		
 //		private boolean isBookForSwap;
 		bookResponse.setBookForSwap(book.isBookForSwap());
+		
+		bookResponse.setBookRentalPricePerDay(book.getBookRentalPricePerDay());
+		
+		bookResponse.setBookRentalPricePerDayCurrency(book.getBookRentalPricePerDayCurrency());
 //		
 //		private int totalOngoingInteractionsForThisBook;
 		bookResponse.setTotalOngoingInteractionsForThisBook(book.getTotalOngoingInteractionsForThisBook());
@@ -156,12 +163,17 @@ public class DTOMappingsImpl implements DTOMappings{
 	public List<String> fetchIdOfAllBooksUploadedForThisGoogleApiBook(List<Book> booksUploadedForThisGoogleApiBook){
 		
 		List<String> booksIdList = new ArrayList<>();
-		
-		if(booksUploadedForThisGoogleApiBook.size() > 0) {
-			for(Book book : booksUploadedForThisGoogleApiBook) {
-				booksIdList.add(book.getBookId());
+		if(booksUploadedForThisGoogleApiBook!=null) {
+			if(booksUploadedForThisGoogleApiBook.size() > 0) {
+				for(Book book : booksUploadedForThisGoogleApiBook) {
+					booksIdList.add(book.getBookId());
+				}
 			}
+		}else {
+			booksUploadedForThisGoogleApiBook = new ArrayList<>();
+	
 		}
+		
 		
 		return booksIdList;
 	}

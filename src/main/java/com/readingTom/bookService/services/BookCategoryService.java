@@ -22,6 +22,9 @@ public interface BookCategoryService {
 	//find the category by name //custom finder methods
 	public BookCategory findByCategoryName(String categoryName);
 	
-	//find googleApiBooks by category
-	public List<GoogleApiBook> getAllGoogleApiBooksUploadedForThisCategory(String categoryName);
+	//find googleApiBooks by category name
+	public List<GoogleApiBook> getAllGoogleApiBooksUploadedForThisCategoryName(String categoryName);
+	
+	//find googleApiBooks by category id
+	public List<GoogleApiBook> getAllGoogleApiBooksUploadedForThisCategoryId(String categoryId);
 }

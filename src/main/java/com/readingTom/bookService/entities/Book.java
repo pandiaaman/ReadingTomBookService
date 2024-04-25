@@ -21,6 +21,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -40,6 +41,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "book_table")
 public class Book {
 
@@ -93,6 +95,12 @@ public class Book {
 	@ColumnDefault("false")
 	@JsonProperty
 	private boolean isBookForSwap;
+	
+	@Column(name = "book_rental_price_per_day", nullable = false, columnDefinition = "INT DEFAULT 5")
+	private int bookRentalPricePerDay;
+	
+	@Column(name = "book_rental_price_per_day_currency", columnDefinition = "VARCHAR(5) DEFAULT 'INR'")
+	private String bookRentalPricePerDayCurrency; //CAN BE ENUM as well
 	
 	@Column(name = "total_ongoing_interactions_for_this_book", nullable = false, columnDefinition = "INT DEFAULT 0")
 	private int totalOngoingInteractionsForThisBook;

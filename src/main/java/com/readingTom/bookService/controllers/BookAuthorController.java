@@ -93,29 +93,44 @@ public class BookAuthorController {
 	
 	//other requests
 	@GetMapping(value = "byname/googleapibooks", produces= {"application/json","application/xml"})
-	public ResponseEntity<List<GoogleApiBook>> getAllGoogleApiBooksUploadedForThisAuthor(@RequestParam String author){
+	public ResponseEntity<List<GoogleApiBook>> getAllGoogleApiBooksUploadedForThisAuthorName(@RequestParam String authorname){
 		try {
 			// Decode the authorName if it's encoded
-	        String decodedAuthorName = UriComponentsBuilder.fromPath(author).build().toString();
+	        String decodedAuthorName = UriComponentsBuilder.fromPath(authorname).build().toString();
 
-			List<GoogleApiBook> fetchedBooks = this.bookAuthorService.getAllGoogleApiBooksUploadedForThisAuthor(decodedAuthorName);
+			List<GoogleApiBook> fetchedBooks = this.bookAuthorService.getAllGoogleApiBooksUploadedForThisAuthorName(decodedAuthorName);
 		
 			return ResponseEntity.status(HttpStatus.OK).body(fetchedBooks);
 		}catch(Exception e) {
-			log.error("error in getting google api books for the given author");
+			log.error("error in getting google api books for the given author name");
 		}
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-	}	
+	}
+	
+	@GetMapping(value = "byid/googleapibooks", produces= {"application/json","application/xml"})
+	public ResponseEntity<List<GoogleApiBook>> getAllGoogleApiBooksUploadedForThisAuthorId(@RequestParam String authorid){
+		try {
+			// Decode the authorName if it's encoded
+	        String decodedAuthorId = UriComponentsBuilder.fromPath(authorid).build().toString();
+
+			List<GoogleApiBook> fetchedBooks = this.bookAuthorService.getAllGoogleApiBooksUploadedForThisAuthorId(decodedAuthorId);
+		
+			return ResponseEntity.status(HttpStatus.OK).body(fetchedBooks);
+		}catch(Exception e) {
+			log.error("error in getting google api books for the given author id");
+		}
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
 	
 	
 	@GetMapping(value = "byname/books", produces= {"application/json","application/xml"})
-	public ResponseEntity<List<Book>> getAllBooksUploadedForThisAuthor(@RequestParam String author){
+	public ResponseEntity<List<Book>> getAllBooksUploadedForThisAuthorName(@RequestParam String author){
 		try {
 			log.info("BookAuthorController :: getAllBooksUploadedForThisAuthor");
 			// Decode the authorName if it's encoded
 	        String decodedAuthorName = UriComponentsBuilder.fromPath(author).build().toString();
 
-			List<GoogleApiBook> fetchedGoogleApiBooks = this.bookAuthorService.getAllGoogleApiBooksUploadedForThisAuthor(decodedAuthorName);
+			List<GoogleApiBook> fetchedGoogleApiBooks = this.bookAuthorService.getAllGoogleApiBooksUploadedForThisAuthorName(decodedAuthorName);
 		
 			List<Book> booksResultSet = new ArrayList<>();
 			
@@ -133,4 +148,33 @@ public class BookAuthorController {
 		}
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
+	
+	
+	@GetMapping(value = "byid/books", produces= {"application/json","application/xml"})
+	public ResponseEntity<List<Book>> getAllBooksUploadedForThisAuthorId(@RequestParam String authorid){
+		try {
+			log.info("BookAuthorController :: getAllBooksUploadedForThisAuthor");
+			// Decode the authorName if it's encoded
+	        String decodedAuthorId = UriComponentsBuilder.fromPath(authorid).build().toString();
+
+			List<GoogleApiBook> fetchedGoogleApiBooks = this.bookAuthorService.getAllGoogleApiBooksUploadedForThisAuthorName(decodedAuthorId);
+		
+			List<Book> booksResultSet = new ArrayList<>();
+			
+			for(GoogleApiBook googleApiBook : fetchedGoogleApiBooks) {
+				String googleApiBookId = googleApiBook.getGoogleApiBookId();
+				
+				List<Book> booksForGivenId = googleApiBookService.getAllBooksForGivenGoogleApiBook(googleApiBookId);
+				
+				booksResultSet.addAll(booksForGivenId);
+			}
+			
+			return ResponseEntity.status(HttpStatus.OK).body(booksResultSet);
+		}catch(Exception e) {
+			log.error("error in getting google api books for the given author id");
+		}
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
+	
+	
 }

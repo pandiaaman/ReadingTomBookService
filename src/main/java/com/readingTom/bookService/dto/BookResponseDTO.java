@@ -34,6 +34,10 @@ public class BookResponseDTO {
 	private boolean isBookForRent;
 	
 	private boolean isBookForSwap;
+
+	private int bookRentalPricePerDay;
+	
+	private String bookRentalPricePerDayCurrency;	
 	
 	private int totalOngoingInteractionsForThisBook;
 	

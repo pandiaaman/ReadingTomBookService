@@ -99,27 +99,68 @@ public class BookCategoryController {
 		
 		//other requests
 		@GetMapping(value = "byname/googleapibooks", produces= {"application/json","application/xml"})
-		public ResponseEntity<List<GoogleApiBook>> getAllGoogleApiBooksUploadedForThisCategory(@RequestParam String category){
+		public ResponseEntity<List<GoogleApiBook>> getAllGoogleApiBooksUploadedForThisCategoryName(@RequestParam String category){
 			try {
 				String decodedCategoryName = UriComponentsBuilder.fromPath(category).build().toString();
 				
-				List<GoogleApiBook> fetchedBooks = this.bookCategoryService.getAllGoogleApiBooksUploadedForThisCategory(decodedCategoryName);
+				List<GoogleApiBook> fetchedBooks = this.bookCategoryService.getAllGoogleApiBooksUploadedForThisCategoryName(decodedCategoryName);
 				
 				return ResponseEntity.status(HttpStatus.OK).body(fetchedBooks);
+			}catch(Exception e) {
+				log.error("error in getting google api books for the given category name");
+			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+		
+		@GetMapping(value = "byid/googleapibooks", produces= {"application/json","application/xml"})
+		public ResponseEntity<List<GoogleApiBook>> getAllGoogleApiBooksUploadedForThisCategoryId(@RequestParam String category){
+			try {
+				String decodedCategoryId = UriComponentsBuilder.fromPath(category).build().toString();
+				
+				List<GoogleApiBook> fetchedBooks = this.bookCategoryService.getAllGoogleApiBooksUploadedForThisCategoryId(decodedCategoryId);
+				
+				return ResponseEntity.status(HttpStatus.OK).body(fetchedBooks);
+			}catch(Exception e) {
+				log.error("error in getting google api books for the given category id");
+			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+		
+		@GetMapping(value = "byname/books", produces= {"application/json","application/xml"})
+		public ResponseEntity<List<Book>> getAllBooksUploadedForThisCategoryName(@RequestParam String category){
+			try {
+				log.info("BookCategoryController :: getAllBooksUploadedForThisCategory");
+				// Decode the authorName if it's encoded (space is %20 and / is %2F)
+		        String decodedCategoryName = UriComponentsBuilder.fromPath(category).build().toString();
+
+				List<GoogleApiBook> fetchedGoogleApiBooks = this.bookCategoryService.getAllGoogleApiBooksUploadedForThisCategoryName(decodedCategoryName);
+			
+				List<Book> booksResultSet = new ArrayList<>();
+				
+				for(GoogleApiBook googleApiBook : fetchedGoogleApiBooks) {
+					String googleApiBookId = googleApiBook.getGoogleApiBookId();
+					
+					List<Book> booksForGivenId = googleApiBookService.getAllBooksForGivenGoogleApiBook(googleApiBookId);
+					
+					booksResultSet.addAll(booksForGivenId);
+				}
+				
+				return ResponseEntity.status(HttpStatus.OK).body(booksResultSet);
 			}catch(Exception e) {
 				log.error("error in getting google api books for the given category");
 			}
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 		
-		@GetMapping(value = "byname/books", produces= {"application/json","application/xml"})
-		public ResponseEntity<List<Book>> getAllBooksUploadedForThisCategory(@RequestParam String category){
+		
+		@GetMapping(value = "byid/books", produces= {"application/json","application/xml"})
+		public ResponseEntity<List<Book>> getAllBooksUploadedForThisCategoryId(@RequestParam String category){
 			try {
 				log.info("BookCategoryController :: getAllBooksUploadedForThisCategory");
-				// Decode the authorName if it's encoded
-		        String decodedCategoryName = UriComponentsBuilder.fromPath(category).build().toString();
+				// Decode the authorName if it's encoded (space is %20 and / is %2F)
+		        String decodedCategoryId = UriComponentsBuilder.fromPath(category).build().toString();
 
-				List<GoogleApiBook> fetchedGoogleApiBooks = this.bookCategoryService.getAllGoogleApiBooksUploadedForThisCategory(decodedCategoryName);
+				List<GoogleApiBook> fetchedGoogleApiBooks = this.bookCategoryService.getAllGoogleApiBooksUploadedForThisCategoryId(decodedCategoryId);
 			
 				List<Book> booksResultSet = new ArrayList<>();
 				
