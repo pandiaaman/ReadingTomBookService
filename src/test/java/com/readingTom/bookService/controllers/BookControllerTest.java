@@ -45,7 +45,7 @@ class BookControllerTest {
 	 private BookService bookService;
 	 
 	 @Autowired
-	 private DTOMappingsImpl dtoMappings = new DTOMappingsImpl();
+	 private DTOMappingsImpl dtoMappings;
 	 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -57,6 +57,7 @@ class BookControllerTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
+		dtoMappings = new DTOMappingsImpl();
 	}
 
 	@AfterEach

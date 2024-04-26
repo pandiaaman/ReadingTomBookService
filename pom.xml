@@ -69,6 +69,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>reading-tom-book-service-docker</finalName>
 	</build>
 
 </project>
